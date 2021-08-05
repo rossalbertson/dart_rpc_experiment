@@ -20,12 +20,12 @@ void main(List<String> arguments) async {
 class NameApi {
   List<Name> list = [];
 
-  void _loadNames() async {
+  Future<void> _loadNames() async {
     //list.clear();
     var database = mongo.Db('mongodb://localhost:27017/obj1');
     var collection = database.collection('Person');
     await database.open();
-    list.clear();
+    //list.clear();
     var raw = await collection.find().toList();
     print(raw);
     for (var rawName in raw) {
@@ -43,8 +43,8 @@ class NameApi {
   }
 
   @ApiMethod(path: 'list')
-  List<Name> getList() {
-    _loadNames();
+  Future<List<Name>> getList() async {
+    await _loadNames();
     return list;
   }
 
